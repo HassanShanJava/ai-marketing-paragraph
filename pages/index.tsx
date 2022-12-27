@@ -24,7 +24,11 @@ export default function Home() {
               // type="text"
               rows={3}
               value={input}
-              onChange={e=>setInput(e.target.value)}
+              onChange={(e)=>{
+                if(e.target.value.length<=30){
+                  setInput(e.target.value)
+                }
+              }}
               className="border-2 border-gray-300 w-full bg-white  p-4 rounded-lg text-sm focus:outline-none resize-none"
               placeholder="Enter your text here"
             />

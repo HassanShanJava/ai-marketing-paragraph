@@ -1,9 +1,9 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "@next/font/google";
+import styles from "../styles/Home.module.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
@@ -14,7 +14,23 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <p>Hello</p>
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold text-center p-12 ">
+          Marketing Copy Generator
+        </h2>
+        {/* input field  */}
+        <div className="flex flex-col gap-4  justify-center w-1/3 mx-auto">
+          <textarea
+            // type="text"
+            rows={3}
+            className="border-2 border-gray-300 bg-white  p-4 rounded-lg text-sm focus:outline-none resize-none"
+            placeholder="Enter your text here"
+          ></textarea>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Generate
+          </button>
+        </div>
+      </div>
     </>
-  )
+  );
 }

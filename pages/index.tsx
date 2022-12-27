@@ -1,9 +1,22 @@
 import Head from "next/head";
 import { useState } from "react";
 
-
 export default function Home() {
-  const [input, setInput] =useState<string>('')
+  const [input, setInput] = useState<string>("");
+
+  const submit = async () => {
+    const res = await fetch("/api/marketing-copy", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ input }),
+    });
+
+    const suggestionResult:string=await res.json()
+    // const data = await res.json();
+    console.log(suggestionResult);
+  };
 
   return (
     <>
@@ -24,20 +37,20 @@ export default function Home() {
               // type="text"
               rows={3}
               value={input}
-              onChange={(e)=>{
-                if(e.target.value.length<=30){
-                  setInput(e.target.value)
+              onChange={(e) => {
+                if (e.target.value.length <= 30) {
+                  setInput(e.target.value);
                 }
               }}
               className="border-2 border-gray-300 w-full bg-white  p-4 rounded-lg text-sm focus:outline-none resize-none"
-              placeholder="Enter your text here"
+              placeholder="Enter your topic here"
             />
             {/* Charactor limit */}
             <div className="absolute bottom-2 right-2 text-gray-400 text-xs">
               <span>{input.length}</span>/30
             </div>
           </div>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <button type="button" onClick={submit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Generate
           </button>
         </div>

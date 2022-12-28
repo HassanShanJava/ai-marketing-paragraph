@@ -3,20 +3,24 @@ import { useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
+// OPEN_API=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
 
   const submit = async () => {
-    const res = await fetch("/api/marketing-copy", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ input }),
-    });
+    
+      const res = await fetch('/api/marketing-copy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({input}) 
+      })
+      console.log(res);
+      
 
-    const suggestionResult:string=await res.json()
-    // const data = await res.json();
-    console.log(suggestionResult);
-  };
+      const suggestionResult:string = await res.json()
+      console.log('result', suggestionResult)
+  
+}
 
   return (
     <>
@@ -26,6 +30,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl font-bold text-center p-12 ">
           Marketing Copy Generator
@@ -33,26 +38,25 @@ export default function Home() {
         {/* input field  */}
         <div className="flex flex-col gap-4  justify-center w-1/3 mx-auto">
           <div className="relative w-full">
+            
             <textarea
-              // type="text"
               rows={3}
               value={input}
-              onChange={(e) => {
-                if (e.target.value.length <= 30) {
-                  setInput(e.target.value);
-                }
-              }}
+              onChange={(e) => { setInput(e.target.value) }}
               className="border-2 border-gray-300 w-full bg-white  p-4 rounded-lg text-sm focus:outline-none resize-none"
               placeholder="Enter your topic here"
             />
+          
             {/* Charactor limit */}
             <div className="absolute bottom-2 right-2 text-gray-400 text-xs">
               <span>{input.length}</span>/30
             </div>
           </div>
+          
           <button type="button" onClick={submit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Generate
           </button>
+        
         </div>
       </div>
     </>

@@ -1,33 +1,35 @@
 import Head from "next/head";
-import { use, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
-  const [error, setError] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false);
+
+  // result
+  const [result, setResult] = useState<string>("");
+
+  // on press of genration, check if the leanght is less than 30
+  useEffect(() => {
+    if (input.length > 30) {
+      return setError(true);
+    } else {
+      return setError(false);
+    }
+  }, [input]);
 
   const submit = async () => {
-    
-    // on press of genration, check if the leanght is less than 30
-    if(input.length>30){
-      return setError(true)
-    }
+    const res = await fetch("/api/marketing-copy", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ input }),
+    });
+    console.log(res);
 
-
-
-      const res = await fetch('/api/marketing-copy', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({input}) 
-      })
-      console.log(res);
-      
-
-      const suggestionResult:string = await res.json()
-      console.log('result', suggestionResult)
-  
-}
+    const suggestionResult: string = await res.json();
+    setResult(suggestionResult);
+  };
 
   return (
     <>
@@ -37,7 +39,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl font-bold text-center p-12 ">
           Marketing Copy Generator
@@ -46,31 +48,52 @@ export default function Home() {
         {/* input field  */}
         <div className="flex flex-col gap-4  justify-center w-1/3 mx-auto">
           <div className="relative w-full">
-            
-        {/* error message */}
-        {error&&(
-          <p className=" text-red-500 text-xs">
-            Character limit exceeded
-          </p>
-        )}
+            {/* error message */}
+            {error && (
+              <p className=" text-red-500 text-xs">Character limit exceeded</p>
+            )}
             <textarea
               rows={3}
               value={input}
-              onChange={(e) => { setInput(e.target.value) }}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
               className="border-2 border-gray-300 w-full bg-white  p-4 rounded-lg text-sm focus:outline-none resize-none"
               placeholder="Enter your topic here"
             />
-          
+
             {/* Charactor limit */}
-            <div className="absolute bottom-2 right-2 text-gray-400 text-xs">
+            <div
+              className={`absolute bottom-2 right-2 ${
+                error ? "text-red-500" : "text-gray-400"
+              }  text-xs`}
+            >
               <span>{input.length}</span>/30
             </div>
           </div>
-          
-          <button type="button" onClick={submit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+
+          <button
+            type="button"
+            onClick={submit}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
             Generate
           </button>
-        
+
+          {/* Result */}
+          {result  && (
+            <div className="mt-4">
+              <h4 className="text-lg font-semibold pb-2">
+                Your Marketing Copy:
+              </h4>
+              <div className="relative w-full rounded-md bg-gray-100 p-4">
+                <p className="text-sm text-gray-700 ">
+                  Rebum vero erat sed lorem sed vero eos sed erat et, at clita
+                  ut clita.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

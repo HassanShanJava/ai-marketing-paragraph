@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { BeatLoader} from "react-spinners"
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
@@ -7,6 +8,11 @@ export default function Home() {
 
   // result
   const [result, setResult] = useState<string>("");
+
+  // laoding for the user experience
+  const [loading, setLoading] = useState<boolean>(false)
+
+
 
   // on press of genration, check if the leanght is less than 30
   useEffect(() => {
@@ -18,17 +24,30 @@ export default function Home() {
   }, [input]);
 
   const submit = async () => {
-    const res = await fetch("/api/marketing-copy", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ input }),
-    });
-    console.log(res);
+    setLoading(true)
 
-    const suggestionResult: string = await res.json();
-    setResult(suggestionResult);
+    try {
+      const res = await fetch("/api/marketing-copy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ input }),
+      });
+      console.log(res);
+      
+      const suggestionResult: string = await res.json();
+      console.log(suggestionResult);
+      
+      setResult(suggestionResult);
+
+    } catch (error) {
+      console.log(error);
+      
+    }finally{
+      setLoading(false)
+    }
+
   };
 
   return (
@@ -77,7 +96,13 @@ export default function Home() {
             onClick={submit}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Generate
+            {loading?(
+              <div className="flex gap-4 justify-center items-center text-center">
+                <p>Loading </p>
+                <BeatLoader color="white" size={8}/>
+
+              </div>
+            ):"Generate"}
           </button>
 
           {/* Result */}

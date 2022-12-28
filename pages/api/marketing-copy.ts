@@ -4,7 +4,7 @@ import { configuration } from "../utils/constant";
 import { OpenAIApi } from "openai";
 
 type Data = {
-  input: string;
+  result: string;
 };
 
 const openai = new OpenAIApi(configuration);
@@ -31,9 +31,9 @@ export default async function handler(
 
   const response = await openai.createCompletion({
     model: "text-davinci-002",
-    prompt: `You are a marketing expert, and a customer approaches you to write a very short and exciting marketing copy for them. This is the topic they would like a marketing copy for: "${input}." \n\nThis is the short marketing copy you came up with:`,
+    prompt: `You are a marketing expert, and a customer approaches you to write a very short and exciting marketing copy for them. This is the topic they would like a marketing copy for: "${input}." This is the short marketing copy you came up with:`,
     temperature: 0.85,
-    max_tokens: 40,
+    max_tokens: 50,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,

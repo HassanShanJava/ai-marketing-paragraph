@@ -36,10 +36,10 @@ export default function Home() {
       });
       console.log(res);
       
-      const suggestionResult: string = await res.json();
-      console.log(suggestionResult);
+      const suggestionResult: any = await res.json();
+      console.log(suggestionResult.result);
       
-      setResult(suggestionResult);
+      setResult(suggestionResult.result);
 
     } catch (error) {
       console.log(error);
@@ -113,8 +113,7 @@ export default function Home() {
               </h4>
               <div className="relative w-full rounded-md bg-gray-100 p-4">
                 <p className="text-sm text-gray-700 ">
-                  Rebum vero erat sed lorem sed vero eos sed erat et, at clita
-                  ut clita.
+                  {result}
                 </p>
               </div>
             </div>

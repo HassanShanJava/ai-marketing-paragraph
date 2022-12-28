@@ -1,12 +1,19 @@
 import Head from "next/head";
-import { useState } from "react";
+import { use, useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
-// OPEN_API=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
+  const [error, setError] = useState<boolean>(false)
 
   const submit = async () => {
     
+    // on press of genration, check if the leanght is less than 30
+    if(input.length>30){
+      return setError(true)
+    }
+
+
+
       const res = await fetch('/api/marketing-copy', {
         method: 'POST',
         headers: {
@@ -35,10 +42,17 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center p-12 ">
           Marketing Copy Generator
         </h2>
+
         {/* input field  */}
         <div className="flex flex-col gap-4  justify-center w-1/3 mx-auto">
           <div className="relative w-full">
             
+        {/* error message */}
+        {error&&(
+          <p className=" text-red-500 text-xs">
+            Character limit exceeded
+          </p>
+        )}
             <textarea
               rows={3}
               value={input}
